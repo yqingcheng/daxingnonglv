@@ -1,0 +1,197 @@
+<style lang="less">
+  .img_bar{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 40rpx 0;
+    image{
+      width: 100%;
+      height: 150rpx;
+    }
+  }
+  .tabbar_img{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    view{
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      image{
+        width: 130rpx;
+        height: 130rpx;
+        margin: 0 auto;
+      }
+      text{
+        font-size: 28rpx;
+        width: 120rpx;
+        line-height: 55rpx;
+        margin: 0 auto;
+      }
+    }
+  }
+  .black_bar{
+    width: 100%;
+    height: 20rpx;
+    margin-top: 20rpx;
+    background: #eee;
+  }
+  .allshop_title{
+    width: 100%;
+    padding: 20rpx 0 20rpx 20rpx;
+    box-sizing: border-box;
+    font-size: 36rpx;
+  }
+
+</style>
+<template>
+  <view class="">
+    <carouselfigure :carousel.sync="carousel"></carouselfigure>
+    <view class="img_bar">
+      <image src="../images/home/2.jpg" mode="scleToFill" @tap="societySkip"></image>
+      <!--<image src="../images/home/3.jpg" mode="scleToFill" @tap="signSkip"></image>-->
+    </view>
+    <view class="tabbar_img">
+      <view wx:for="{{tabbar_img}}" wx:key="{{item}}" data-id="{{index}}" @tap="imgtabSkip">
+        <image src="{{item.img}}" mode="scleToFill"></image>
+        <text>{{item.text}}</text>
+      </view>
+    </view>
+    <view class="black_bar"></view>
+    <view>
+      <view class="allshop_title">
+        所有商品
+      </view>
+      <allshop :shop_list.sync="shop_list"></allshop>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Carouselfigure from '../components/carouselfigure'
+  import Allshop from '../components/allshop'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '大兴农旅'
+    }
+    components = {
+      carouselfigure: Carouselfigure,
+      allshop: Allshop
+    }
+    data = {
+      api: '',
+      /*
+      * 轮播图数据 对象 carousel
+      * */
+      carousel: {
+        imgUrls: [],
+        indicatorDots: true,
+        autoplay: true,
+        interval: 3000,
+        duration: 1000
+      },
+      /*
+      * 首页导航栏数据 数组 tabbar_img
+      * */
+      tabbar_img: [
+        {
+          img: '../images/home/4.jpg',
+          text: '热门景点'
+        },
+        {
+          img: '../images/home/5.jpg',
+          text: '农品大全'
+        },
+        {
+          img: '../images/home/6.jpg',
+          text: '最新活动'
+        },
+        {
+          img: '../images/home/7.jpg',
+          text: '农旅之窗'
+        }
+      ],
+      shop_list: []
+    }
+
+    computed = {
+    }
+
+    methods = {
+      /*
+      * 跳转到关于社会页面
+      * */
+      societySkip() {
+        wx.navigateTo({url: 'otherpage/society'})
+      },
+      /*
+      * 签到
+      * */
+//      signSkip() {
+//        console.log('sign')
+//      },
+      /*
+      * 首页导航跳转
+      * */
+      imgtabSkip(e) {
+        if (e.currentTarget.dataset.id === 0) {
+          wx.navigateTo({url: 'otherpage/sightspot'})
+        }
+        if (e.currentTarget.dataset.id === 1) {
+          wx.navigateTo({url: 'otherpage/allagriculture'})
+        }
+        if (e.currentTarget.dataset.id === 2) {
+          wx.navigateTo({url: 'otherpage/newhuodong'})
+        }
+        if (e.currentTarget.dataset.id === 3) {
+          wx.navigateTo({url: 'otherpage/nongwindow'})
+        }
+      }
+    }
+
+    onLoad() {
+      console.log(wx.getStorageSync('openid'))
+      this.$parent.getUserInfo()
+      this.api = this.$parent.globalData.api
+      /*
+      * 商品列表请求
+      * */
+      wx.request({
+        url: this.api + '/restapi/goods',
+        data: {
+          config_id: '622',
+          page: 1,
+          per_page: 4
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+          this.shop_list = res.data.data.items
+          this.$apply()
+        }
+      })
+      /*
+      * 首页轮播图请求
+      * */
+      wx.request({
+        url: 'https://www.xiaoniren.cn/restapi/wechat-focus',
+        data: {
+          config_id: '622',
+          belongs: '1',
+          type: '0'
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        method: 'GET',
+        success: (res) => {
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

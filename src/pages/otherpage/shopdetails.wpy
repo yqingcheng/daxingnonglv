@@ -1,0 +1,126 @@
+
+<!--------------------------------------商品详情页面----------------------------------------->
+
+<style lang="less">
+  .shopdetails{
+    .tit{
+      font-size: 30rpx;
+      padding: 20rpx 0 20rpx 40rpx;
+    }
+    .price{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 30rpx 0;
+      border-bottom: 1px solid #ccc;
+      text:nth-child(1){
+        color: red;
+        font-size: 36rpx;
+      }
+      text:nth-child(2){
+        color: #888;
+        font-size: 28rpx;
+      }
+      /*text:nth-child(3){*/
+        /*color: #888;*/
+        /*font-size: 28rpx;*/
+      /*}*/
+    }
+    .details{
+      padding: 0 35rpx;
+      font-size: 28rpx;
+      text:nth-child(1){
+        display: block;
+        margin-top: 50rpx;
+      }
+      text:nth-child(2){
+        display: block;
+        margin-top: 10rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="shopdetails">
+    <carouselfigure :carousel.sync="carousel"></carouselfigure>
+    <view class="tit">{{name}}</view>
+    <view class="price">
+      <text>￥{{price}}</text>
+      <!--<text>月销587456</text>-->
+      <text>库存：{{stock}}</text>
+    </view>
+    <view class="details">
+      <text>商品介绍：{{detail}}</text>
+      <text>重量：{{weight}}g</text>
+    </view>
+    <buy :pay.sync="pay" :goodid.sync="goodid"></buy>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Buy from '../../components/buy'
+  import Carouselfigure from '../../components/carouselfigure'
+
+  export default class Shopdetails extends wepy.page {
+    config = {
+      navigationBarTitleText: '商品详情'
+    }
+    components = {
+      buy: Buy,
+      carouselfigure: Carouselfigure
+    }
+    data = {
+      api: '',
+      goodid: '',
+      carousel: {
+        imgUrls: [],
+        indicatorDots: true,
+        autoplay: true,
+        interval: 3000,
+        duration: 1000
+      },
+      name: '',
+      price: '',
+      stock: '',
+      detail: '',
+      weight: ''
+    }
+    events = {
+    }
+    computed = {
+    }
+
+    methods = {
+    }
+    onLoad(options) {
+      this.api = this.$parent.globalData.api
+      this.goodid = options.id
+      this.$apply()
+      /*
+      * 商品详情数据请求
+      * */
+      wx.request({
+        url: this.api + '/restapi/goods/' + options.id,
+        data: {
+          config_id: '622'
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+          if (res.data.data.imgs) {
+            this.carousel.imgUrls = res.data.data.imgs.split('|||')
+          }
+          this.name = res.data.data.name
+          this.price = res.data.data.price
+          this.stock = res.data.data.stock
+          this.detail = this.$parent.methods.convertHtmlToText(res.data.data.detail).trim()
+          this.weight = res.data.data.weight
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

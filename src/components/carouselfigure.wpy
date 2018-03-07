@@ -1,0 +1,41 @@
+<!---------------------------------轮播图组件---------------------------------------------->
+
+<style lang="less">
+  .slide-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  swiper {
+    height: 200px;
+  }
+</style>
+<template>
+  <view class="carouselfigure">
+    <swiper indicator-dots="{{carousel.indicatorDots}}"
+            autoplay="{{carousel.autoplay}}" interval="{{carousel.interval}}" duration="{{carousel.duration}}">
+      <block wx:for="{{carousel.imgUrls}}" wx:key="item">
+        <swiper-item>
+          <image src="{{api+item}}" class="slide-image" mode="scleToFill"/>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Carouselfigure extends wepy.component {
+    props = {
+      carousel: {}
+    }
+    data = {
+      api: ''
+    }
+
+    onLoad() {
+      this.api = this.$parent.$parent.globalData.api
+      this.$apply()
+    }
+  }
+</script>

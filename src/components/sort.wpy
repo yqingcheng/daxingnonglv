@@ -1,0 +1,127 @@
+
+<!---------------------------------搜索框---------------------------------------------->
+
+<style lang="less">
+  .sort_wrap{
+    width: 100%;
+    height: 54px;
+  }
+  .nearby_title{
+    position: fixed;
+    top: 40px;
+    z-index: 99;width: 100%;
+    background: white;
+    /*height: 55px;*/
+    /*border: 1px solid red;*/
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 32rpx;
+    border-bottom: 9px solid #eee;
+    padding: 24rpx 0;
+    .price,.sales{
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .i1,.i11{
+      width: 0;
+      height: 0;
+      border-left: 7rpx solid transparent;
+      border-right: 7rpx solid transparent;
+      border-bottom: 7rpx solid red;
+      position: absolute;
+      margin-left: 15rpx;
+      top: 12rpx;
+    }
+    .i2,.i22{
+      width: 0;
+      height: 0;
+      border-left: 7rpx solid transparent;
+      border-right: 7rpx solid transparent;
+      border-bottom: 7rpx solid black;
+      position: absolute;
+      margin-left: 15rpx;
+      top: 12rpx;
+    }
+    .i3,.i33{
+      width: 0;
+      height: 0;
+      border-left: 7rpx solid transparent;
+      border-right: 7rpx solid transparent;
+      border-top: 7rpx solid black;
+      position: absolute;
+      bottom: 12rpx;
+      margin-left: 15rpx;
+    }
+    .i4,.i44{
+      width: 0;
+      height: 0;
+      border-left: 7rpx solid transparent;
+      border-right: 7rpx solid transparent;
+      border-top: 7rpx solid red;
+      position: absolute;
+      bottom: 12rpx;
+      margin-left: 15rpx;
+    }
+  }
+</style>
+<template>
+  <view class="sort">
+    <view class="sort_wrap"></view>
+    <view class="nearby_title">
+      <view @tap="salesSolt" class="sales">
+        按销量
+        <view class="icon">
+          <i class="{{sales === 1 ? 'i2' : sales ? 'i2' : 'i1'}}"></i>
+          <i class="{{sales === 1 ? 'i3' : sales ? 'i4' : 'i3'}}"></i>
+        </view>
+      </view>
+      <view class="price" @tap="priceSort">
+        按价格
+        <view class="icon">
+          <i class="{{price === 1 ? 'i22' :price ? 'i22' : 'i11'}}"></i>
+          <i class="{{price === 1 ? 'i33' :price ? 'i44' : 'i33'}}"></i>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Sort extends wepy.component {
+    data = {
+      price: 1,
+      sales: 1
+    }
+    methods = {
+      /*
+      * 按销量排序
+      * */
+      salesSolt() {
+        this.price = 1
+        if (this.sales) {
+          this.sales = false
+          this.$emit('Sorts', this.sales, 'sales')
+        } else {
+          this.sales = true
+          this.$emit('Sorts', this.sales, 'sales')
+        }
+      },
+      /*
+      * 按价格排序
+      * */
+      priceSort() {
+        this.sales = 1
+        if (this.price) {
+          this.price = false
+          this.$emit('Sorts', this.price, 'price')
+        } else {
+          this.price = true
+          this.$emit('Sorts', this.price, 'price')
+        }
+      }
+    }
+  }
+</script>

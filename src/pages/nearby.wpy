@@ -1,0 +1,125 @@
+<style lang="less">
+  .nav{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    view{
+      width: 40%;
+      margin: 10rpx 0;
+      border-radius: 5px;
+      background: #eee;
+      font-size: 28rpx;
+      box-sizing: border-box;
+      padding: 10rpx 38rpx;
+      text-align: center;
+    }
+  }
+  .blo{
+    width: 100%;
+    height: 80rpx;
+  }
+</style>
+<template>
+  <view class="">
+    <!--<view class="nav">-->
+      <!--<view wx:for="{{distance}}" wx:key="{{item}}" data-id="{{index}}" @tap="distanceHander">{{item}}</view>-->
+    <!--</view>-->
+    <!--<view class="blo"></view>-->
+    <!--<sort></sort>-->
+    <dianpulist :shop_delicioou.sync="shop_delicioou" :num.sync="num" :page.sync="page"></dianpulist>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Dianpulist from '../components/dianpulist'
+//  import Sort from '../components/sort'
+
+  export default class Nearby extends wepy.page {
+    config = {
+      navigationBarTitleText: '附近'
+    }
+    components = {
+      dianpulist: Dianpulist
+//      sort: Sort
+    }
+    data = {
+      shop_delicioou: [],
+      num: 0,
+      api: '',
+      page: 'nearby',
+      distance: [
+        '<0.1km', '>5km'
+      ],
+      distance1: ''
+    }
+
+    computed = {
+    }
+//    events = {
+//      /*
+//      * 获取按销量排序的参数
+//      * */
+//      salesSolts(sales) {
+//        console.log(sales)
+//      },
+//      /*
+//      * 获取按价格排序额参数
+//      * */
+//      priceSorts(price) {
+//        console.log(price)
+//      }
+//    }
+    methods = {
+      distanceHander(e) {
+        let distance_id = e.currentTarget.dataset.id
+        this.distance1 = this.distance[distance_id]
+        this.distancev()
+      }
+    }
+    distancev() {
+      console.log(111)
+      wx.getLocation({
+        type: 'wgs84',
+        success: (res) => {
+          console.log(res)
+          let latitude = res.latitude
+          let longitude = res.longitude
+          wx.request({
+            url: this.api + '/restapi/merchant-store', //店铺列表
+            data: {
+              config_id: 622,
+              pagesize: 100,
+              lon: longitude,
+              lat: latitude,
+              distance: 0
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            method: 'GET',
+            success: (res) => {
+              this.shop_delicioou = res.data.data
+//              console.log(res)
+//              if (this.distance === '' || this.distance === '<0.1km') {
+//                this.shop_delicioou = res.data.data
+//              } else {
+//                res.data.data.forEach((item) => {
+//                  this.shop_delicioou.push(item)
+//                })
+//              }
+              this.$apply()
+            }
+          })
+        }
+      })
+    }
+    onLoad() {
+      this.api = this.$parent.globalData.api
+      this.distancev()
+    }
+  }
+</script>

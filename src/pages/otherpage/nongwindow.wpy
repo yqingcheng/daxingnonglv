@@ -1,0 +1,85 @@
+
+<!--------------------------------------农旅之窗----------------------------------------->
+
+<style lang="less">
+  .nongwindow_vie{
+    display: flex;
+    flex-direction: row;
+    margin: 10rpx 0;
+    image{
+      flex: 0 0 300rpx;
+      height: 250rpx;
+    }
+    .essay{
+      width: auto;
+      margin: 0 20rpx 0 30rpx;
+      position: relative;
+      text:nth-child(1){
+        font-weight: 600;
+        font-size: 34rpx;
+      }
+      text:nth-child(2){
+        font-size: 30rpx;
+        color: #aaa;
+        position: absolute;
+        right: 0;
+        bottom: 10rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="nongwindow">
+    <view class="nongwindow_vie" wx:for="{{essaylist}}" wx:key="{{index}}" data-id="{{index}}" @tap="skipEssay">
+      <image src="{{item.img}}" mode="scleToFill"></image>
+      <view class="essay">
+        <text>{{item.text1}}</text>
+        <text>{{item.text2}}</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Nongwindow extends wepy.page {
+    config = {
+      navigationBarTitleText: '农旅之窗'
+    }
+    components = {
+    }
+    data = {
+      essaylist: [
+        {
+          img: '../../images/home/1.jpg',
+          text1: '大兴农旅召开2017全国农产品交易大会',
+          text2: '2017-9-04'
+        },
+        {
+          img: '../../images/home/1.jpg',
+          text1: '大兴农旅召开2017全国农产品交易大会',
+          text2: '2017-9-04'
+        },
+        {
+          img: '../../images/home/1.jpg',
+          text1: '大兴农旅召开2017全国农产品交易大会',
+          text2: '2017-9-04'
+        }
+      ]
+    }
+    events = {
+    }
+    computed = {
+    }
+    methods = {
+      skipEssay(e) {
+        console.log(e.currentTarget.dataset.id)
+        wx.navigateTo({url: 'essaydetails'})
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>

@@ -1,0 +1,197 @@
+<style lang="less">
+  @font-face {
+    font-family: "iconfont";
+    src: url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAUIAAsAAAAAB2QAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kgYY21hcAAAAYAAAABdAAABhpnwBr5nbHlmAAAB4AAAATwAAAFQQUr632hlYWQAAAMcAAAALwAAADYQqqIIaGhlYQAAA0wAAAAcAAAAJAfeA4RobXR4AAADaAAAAAwAAAAMC+kAAGxvY2EAAAN0AAAACAAAAAgAdgCobWF4cAAAA3wAAAAfAAAAIAESAF1uYW1lAAADnAAAAUUAAAJtPlT+fXBvc3QAAATkAAAAIwAAADTX9t9+eJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sE4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDzTY27438AQw9zA0AAUZgTJAQAmxgyaeJzFkMENgDAMAy9t6QMxCA/UeXgxRyfuGsWE8mCCWnKsOJYSBViAKB5iArswHpxyzf3I6n7yTJYagdpK7+o/VUSz7BpUMtNg81b/sXndR6evUAd1YisvCTfEDwxHAAAAeJw1jztOw0AYhPdf413n4TVev504fpEYFDDCGKdAJA0NiAIJpaCkSAlVpDQUaZAoKEKbEiFRwBF8C06A4BwBg8Ro9BUz0wwSEfr+EErBRhraRHvoGJ0jBKQPEcMehEme4j4YoWhYOhOSOAlpHKXCEVgR0c2syHsWoUQBBh3YD7MiSXECB/kQH0JmegBOy73g3TYXFlC3k87d6hQ/geHHbWW4szrZHulZoEmzJucO5w8SEUUJ4zWFwbVl1sRanayeRcU1Sn8L+9B0EvfsUg5a/Oo+v/G6Vg1gPgetFbCXkeqqlW9dU+MOXZcl25XjDR1mXw1ba3q9T1QJ/0JQ8SNqoHb1kgHtgDWEQQoWJdEu9PIi82FQZKaO0XSJ8XL6x7ykKp1QptLxG+UyXvwXFd9LQiZVSMav1eAHTrU1QXicY2BkYGAAYvlMlQXx/DZfGbhZGEDg2tH1nAj6/0MWBmYJIJeDgQkkCgAPvgmsAHicY2BkYGBu+N/AEMPCAAJAkpEBFTADAEcJAmwEAAAAA+kAAAQAAAAAAAAAAHYAqHicY2BkYGBgZghkYGUAASYg5gJCBob/YD4DABD3AXAAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAmZGJkZmRhYGxgq2wNLUoNY+BAQAWVgMrAA==') format('woff');
+  }
+
+  .iconfont {
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-queren:before { content: "\e62e"; }
+
+</style>
+
+<script>
+  import wepy from 'wepy'
+  import 'wepy-async-function'
+
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        'pages/index',
+        'pages/nearby',
+        'pages/me',
+        'pages/otherpage/society',
+        'pages/otherpage/societyessay',
+        'pages/otherpage/sightspot',
+        'pages/otherpage/allagriculture',
+        'pages/otherpage/shopdetails',
+        'pages/otherpage/payorder',
+        'pages/otherpage/payok',
+        'pages/otherpage/dianpudetails',
+        'pages/otherpage/nongwindow',
+        'pages/otherpage/essaydetails',
+        'pages/otherpage/myorder',
+        'pages/otherpage/memberInfo',
+        'pages/otherpage/orderInfo',
+        'pages/otherpage/piaoDetails',
+        'pages/otherpage/buypiao',
+        'pages/otherpage/piaoOrder',
+        'pages/otherpage/piaoOrderDetails',
+        'pages/otherpage/newhuodong',
+        'pages/otherpage/huodongDetail',
+        'pages/otherpage/logistics'
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#fff',
+        navigationBarTitleText: 'WeChat',
+        navigationBarTextStyle: 'black'
+      },
+      tabBar: {
+        color: '#777',
+        selectedColor: '#ff6a3c',
+        backgroundColor: '#eee',
+        'borderStyle': 'black',
+        'list': [{
+          'pagePath': 'pages/index',
+          'text': '首页',
+          'iconPath': 'images/tabbar/home2.png',
+          'selectedIconPath': 'images/tabbar/home3.png'
+        }, {
+          'pagePath': 'pages/nearby',
+          'text': '附近',
+          'iconPath': 'images/tabbar/shop2.png',
+          'selectedIconPath': 'images/tabbar/shop3.png'
+        }, {
+          'pagePath': 'pages/me',
+          'text': '个人中心',
+          'iconPath': 'images/tabbar/me2.png',
+          'selectedIconPath': 'images/tabbar/me3.png'
+        }]
+      }
+    }
+
+    globalData = {
+      userInfo: null,
+      api: 'https://www.xiaoniren.cn'
+//    getsomething: function (id, cb) {
+//      wx.request({
+//        url: this.api + '/restapi/goods', //商品列表
+//        data: {
+//          config_id: 622,
+////          category_id:id,
+////          pagesize: 100
+//        },
+//        header: {
+//          'content-type': 'application/json' // 默认值
+//        },
+//        method: 'GET',
+//        success: (res) => {
+//          cb(res)
+//        }
+//      })
+//    }
+    }
+    methods = {
+      convertHtmlToText: function convertHtmlToText(inputText) {
+        var returnText = '' + inputText
+        returnText = returnText.replace(/<\/div>/ig, '\r\n')
+        returnText = returnText.replace(/<\/li>/ig, '\r\n')
+        returnText = returnText.replace(/<li>/ig, '  *  ')
+        returnText = returnText.replace(/<\/ul>/ig, '\r\n')
+        //-- remove BR tags and replace them with line break
+        returnText = returnText.replace(/<br\s*[\/]?>/gi, "\r\n")
+
+        //-- remove P and A tags but preserve what's inside of them
+        returnText = returnText.replace(/<p.*?>/gi, '\r\n')
+        returnText = returnText.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ($1)");
+
+        //-- remove all inside SCRIPT and STYLE tags
+        returnText = returnText.replace(/<script.*>[\w\W]{1,}(.*?)[\w\W]{1,}<\/script>/gi, "");
+        returnText = returnText.replace(/<style.*>[\w\W]{1,}(.*?)[\w\W]{1,}<\/style>/gi, "");
+        //-- remove all else
+        returnText = returnText.replace(/<(?:.|\s)*?>/g, "");
+
+        //-- get rid of more than 2 multiple line breaks:
+        returnText = returnText.replace(/(?:(?:\r\n|\r|\n)\s*){2,}/gim, "\r\n\r\n");
+
+        //-- get rid of more than 2 spaces:
+        returnText = returnText.replace(/ +(?= )/g, '');
+
+        //-- get rid of html-encoded characters:
+        returnText = returnText.replace(/ /gi, " ");
+        returnText = returnText.replace(/&/gi, "&");
+        returnText = returnText.replace(/"/gi, '"');
+        returnText = returnText.replace(/</gi, '<');
+        returnText = returnText.replace(/>/gi, '>');
+
+        return returnText
+      }
+    }
+
+    constructor() {
+      super()
+      this.use('requestfix')
+    }
+
+    onLaunch() {
+      this.testAsync()
+    }
+
+    sleep(s) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('promise resolved')
+        }, s * 1000)
+      })
+    }
+
+    async testAsync() {
+      const data = await this.sleep(3)
+      console.log(data)
+    }
+    /*
+    * 获取用户信息
+    * */
+    getUserInfo(cb) {
+      const that = this
+      if (this.globalData.userInfo) {
+        return this.globalData.userInfo
+      }
+      wepy.getUserInfo({
+        success(res) {
+          /*
+       * 取code值
+       * */
+          wepy.login({
+            success(res) {
+              /*
+              * 取openid
+              * */
+              wx.request({
+                url: 'https://www.xiaoniren.cn/restapi/default/new-openid',
+                data: {
+                  code: res.code,
+                  config_id: 622
+                },
+                method: 'GET',
+                success: function (res) {
+                  let openid = res.data.data.openid
+                  wx.setStorageSync('openid', openid)
+                }
+              })
+            }
+          })
+          that.globalData.userInfo = res.userInfo
+          cb && cb(res)
+        }
+      })
+    }
+  }
+</script>

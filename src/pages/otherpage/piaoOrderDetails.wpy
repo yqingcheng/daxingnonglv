@@ -1,0 +1,126 @@
+<style lang="less">
+  .piao{
+    padding: 0 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20rpx;
+    image{
+      width: 100%;
+      height: 200px;
+    }
+    .detail{
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10rpx;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20rpx;
+      display: flex;
+      flex-direction: column;
+      view{
+        font-size: 24rpx;
+        color: #888;
+        line-height: 40rpx;
+      }
+      .name{
+        font-size: 30rpx;
+        color: black;
+        line-height: 60rpx;
+      }
+      .price{
+        display: flex;
+        view{
+          margin-right: 20rpx;
+        }
+      }
+    }
+    .dianzijuan{
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      view:nth-child(1){
+        font-size: 28rpx;
+        padding-left: 10rpx;
+        color: black;
+        line-height: 60rpx;
+        background: #eee;
+        border-bottom: 1px solid #ccc;
+      }
+      view:nth-child(2){
+        text-align: center;
+        line-height: 70rpx;
+        color: #888;
+        font-size: 24rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="piao">
+    <image src="{{api+piaoDetail.image}}" mode="scleToFill"></image>
+    <view class="detail">
+      <view class="name">{{piaoDetail.name}}</view>
+      <view class="price">
+        <view>单价：{{piaoDetail.suggested_price}}</view>
+        <view>数量：{{piaoDetail.sales_count}}</view>
+      </view>
+      <view>下单时间：{{piaoDetail.created_at}}</view>
+      <view>有效期至：{{piaoDetail.valid_to}}</view>
+    </view>
+    <view class="dianzijuan" >
+      <view>电子券  剩余使用次数：{{}}</view>
+      <view wx:if="{{status}}">未支付，没有电子券</view>
+      <view wx:if="{{!status}}">{{piaoDetail.checksum}}</view>
+    </view>
+    <view class="dianzijuan">
+      <view>抵用券 剩余使用次数：{{}}</view>
+      <view wx:if="{{status}}">未支付，抵用电子券</view>
+      <view wx:if="{{!status}}"></view>
+    </view>
+    <!--<image src="{{api+piaoDetail.thumb}}" mode="scleToFill"></image>-->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Me extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单详情'
+    }
+    components = {
+    }
+    data = {
+      api: '',
+      piaoDetail: [],
+      status: true
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    onLoad(options) {
+      this.status = options.status === '立即使用' ? false : true
+      this.api = this.$parent.globalData.api
+      wx.request({
+        url: this.api + '/restapi/products/' + options.id, //电子票详情
+        data: {
+          config_id: '622'
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        method: 'GET',
+        success: (res) => {
+          this.piaoDetail = res.data.data
+          this.$apply()
+        }
+      })
+      this.$apply()
+    }
+  }
+</script>

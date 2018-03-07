@@ -1,0 +1,88 @@
+
+<!--------------------------------------关于社会页面的文章页面------------------------------>
+
+<style lang="less">
+  .societyessay{
+    .title_img{
+      width: 100%;
+      height: 200px;
+    }
+    .essay{
+      padding: 35rpx 50rpx 0 20rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      view{
+        border-right: 2px solid #ccc;
+        font-size: 36rpx;
+        letter-spacing: 5rpx;
+        font-family: '宋体';
+        font-weight: 600;
+        line-height: 60rpx;
+        width: 100%;
+        text-align: center;
+        margin-right: 25rpx;
+        height: 200rpx;
+        display: flex;
+        align-items: center;
+        padding-right: 8rpx;
+      }
+      image{
+        flex: 0 0 160rpx;
+        height: 160rpx;
+      }
+    }
+    .all_essay{
+      padding: 20rpx;
+      font-size: 30rpx;
+      text{
+        font-weight: 600;
+        line-height: 90rpx;
+      }
+      view{
+        text-indent: 30px;
+        line-height: 50rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="societyessay">
+    <image src="../../images/home/2.jpg" mode="scleToFill" class="title_img"></image>
+    <view class="essay">
+      <view>
+        北京老宋瓜王科技发展有限公司
+      </view>
+      <image src="../../images/home/2.jpg" mode="scleToFill"></image>
+    </view>
+    <view class="all_essay">
+      <text>合作社简介</text>
+      <view>
+        北京老宋瓜王科技发展有限公司水电费展有限公司哦发斯蒂展有限公司水滴哦发斯蒂展有限公司水电费哦发斯蒂展有限公司水一是滴哦发斯蒂展有限公司水电费i哦发斯蒂展有限公司水一是滴哦发斯蒂展有限公司水哦发斯蒂展有限公司水发斯蒂展有限公司水电费哦发斯蒂展有限公司水是滴哦发斯蒂展有限公司水电哦发斯蒂展有限公司水哦发斯蒂展有限公司哦发斯蒂展有限公司水滴哦发斯蒂展有限公司水电哦发斯蒂展有限公司水哦发斯蒂展有限公司水电费哦发斯蒂展有限公司水滴哦发斯蒂展有限公司水电哦发斯蒂展有限公司水是哦发斯蒂展有限公司水是滴哦发斯蒂芬几删掉衣服89位位教我is的见覅u
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Societyessay extends wepy.page {
+    config = {
+      navigationBarTitleText: '关于社会'
+    }
+    components = {
+    }
+    data = {
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

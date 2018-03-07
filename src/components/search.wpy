@@ -1,0 +1,71 @@
+
+<!---------------------------------搜索框---------------------------------------------->
+
+<style lang="less">
+  .search{
+    width: 100%;
+    height:40px;
+    background:rgb(241,241,241) ;
+    padding: 5px 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    /*margin: 10rpx 0;*/
+  }
+  .search view{
+    background: white;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+  }
+  .search view input{
+    border: none;
+    outline: none;
+    flex: 1 0 auto;
+    padding-left: 1rem;
+    font-size: 16px;
+  }
+  .search view image{
+    width: 25px;
+    margin-right: 20px;
+    margin-left: 10px;
+  }
+  .backgroundblock{
+    width: 100%;
+    height: 40px;
+  }
+</style>
+<template>
+  <view class="backgroundblock"></view>
+  <view class="search">
+    <view>
+      <input type="text" placeholder="输入商品/商家" @input="inputHander" value="{{value}}">
+      <image src="../images/search1.png" alt="" mode="widthFix" @tap="search"></image>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Search extends wepy.component {
+    data = {
+      value: ''
+    }
+    methods = {
+      search() {
+        this.$emit('searchs', this.value)
+        this.$apply()
+      },
+      inputHander(e) {
+        this.value = e.detail.value
+        this.$emit('searchs', this.value)
+        this.$apply()
+      }
+    }
+  }
+</script>

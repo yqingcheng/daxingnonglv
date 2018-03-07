@@ -1,0 +1,80 @@
+
+<!---------------------------------购买---------------------------------------------->
+
+<style lang="less">
+  .buybtn{
+    position: fixed;
+    bottom: 0;
+    height: 100rpx;
+    background: #eee;
+    width: 100%;
+    view:nth-child(1){
+      button{
+        display: flex;
+        position: absolute;
+        background: #eee;
+        left: 25rpx;
+        border: 1px solid #eee;
+        flex-direction: row;
+        align-items: center;
+        image{
+          width: 100rpx;
+        }
+        text{
+          font-size: 26rpx;
+          line-height: 30rpx;
+        }
+      }
+      button::after {
+        border:1px solid rgba(0, 0, 0, 0);
+      }
+    }
+    view:nth-child(2){
+      text-align: center;
+      display: inline-block;
+      line-height: 100rpx;
+      background: #FF5312;
+      position: absolute;
+      right: 0;
+      height: 100rpx;
+      color: white;
+      font-size: 32rpx;
+      width: 240rpx;
+    }
+  }
+</style>
+<template>
+  <view class="buybtn">
+    <view>
+      <button open-type="contact">
+        <image src="../images/kefu1.png" mode="widthFix" class="kefu"></image>
+        <text>联系客服</text>
+      </button>
+    </view>
+    <view @tap="buySkip" data-id="{{goodid}}">立即购买</view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Buy extends wepy.component {
+    props = {
+      goodid: {
+        type: [String, Number],
+        coerce: function (v) {
+          return v
+        }
+      }
+    }
+    data = {
+      index: '立即购买'
+    }
+    methods = {
+      buySkip(e) {
+          wx.navigateTo({url: 'payorder?id=' + e.currentTarget.dataset.id})
+      }
+    }
+    onLoad() {
+    }
+  }
+</script>

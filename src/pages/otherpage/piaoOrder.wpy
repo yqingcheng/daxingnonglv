@@ -1,0 +1,235 @@
+
+<!--------------------------------------电子票页面----------------------------------------->
+
+<style lang="less">
+  .piaoorder{
+    .tab{
+      display: flex;
+      position: fixed;
+      top: 0;
+      /*z-index: 99;*/
+      justify-content: space-around;
+      box-sizing: border-box;
+      background: #eee;
+      font-size: 24rpx;
+      line-height: 80rpx;
+      text-align: center;
+      width: 100%;
+      view{
+        border-right: 1px solid white;
+        margin-right: -1px;
+        width: 50%;
+      }
+      .red{
+        color: red;
+        border-bottom: 1px solid;
+      }
+    }
+    .tabview{
+      line-height: 240rpx;
+      text-align: center;
+      font-size: 36rpx;
+      width: 100%;
+    }
+    .orderMessage{
+      padding: 80rpx 10rpx 0 10rpx;
+      box-sizing: border-box;
+      width: 100%;
+      box-sizing: border-box;
+      .orderMessage_view{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border-bottom: 3px solid #ccc;
+        padding-bottom: 2px;
+        .orderid{
+          font-size: 24rpx;
+          line-height: 50rpx;
+        }
+        .num{
+          display: flex;
+          image{
+            height: 200rpx;
+            margin-right: 20rpx;
+            flex: 0 0 200rpx;
+          }
+          .pric{
+            display: flex;
+            flex-direction: column;
+            font-size: 24rpx;
+            .name{
+              color: cornflowerblue;
+              line-height: 50rpx;
+          }
+            .ice{
+              display: flex;
+              justify-content: space-between;
+              view{
+                line-height: 50rpx;
+                margin-right: 20rpx;
+              }
+            }
+            .mobile{
+              line-height: 50rpx;
+            }
+          }
+        }
+        .time{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 24rpx;
+          view:nth-child(2){
+            color: white;
+            background: darkred;
+            padding: 12rpx 24rpx;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="piaoorder">
+    <view class="tab">
+      <view class="{{clickStatus ? 'red' : ''}}" @tap="noHander">未使用订单</view>
+      <view class="{{clickStatus ? '' : 'red'}}" @tap="yesHander">历史订单</view>
+    </view>
+    <view wx:if="{{tapviewStatus}}" class="tabview">
+      您还没有订单
+    </view>
+    <view wx:if="{{!tapviewStatus}}" class="orderMessage">
+      <!--<view>{{orderArr[0].id}}</view>-->
+      <view class="orderMessage_view" wx:for="{{orderArr}}" wx:key="{{item}}" data-status="{{item.status}}" data-id="{{item.product_id}}" @tap="skipDetails">
+        <view class="orderid">订单编号：{{item.id}}</view>
+        <view class="num">
+          <image src="{{api+item.product_thumb}}" mode="scleToFill"></image>
+          <view class="pric">
+            <view class="name">{{item.product_name}}</view>
+            <view class="ice">
+              <view>单价：{{item.price}}</view>
+              <view>数量：{{item.quantity}}</view>
+            </view>
+            <view>有效期至：{{item.valid_to}}</view>
+            <view class="mobile">手机号：{{item.mobile}}</view>
+          </view>
+        </view>
+        <view class="time">
+          <view>{{item.created_at}}</view>
+          <view catchtap="ss" data-id="{{item.product_id}}" data-status="{{item.status}}">{{item.status}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Toast from 'wepy-com-toast'
+  import Dianpulist from '../../components/dianpulist'
+  export default class piaoOrder extends wepy.page {
+    config = {
+      navigationBarTitleText: '电子票订单'
+    }
+    components = {
+      toast: Toast
+    }
+    data = {
+      api: '',
+      clickStatus: true,
+      tapviewStatus: true,
+      orderArr: []
+    }
+    computed = {
+    }
+
+    methods = {
+      ss(e) {
+        let status = e.currentTarget.dataset.status
+        if (status === '立即支付') {
+          /*
+          * 跳转电子票详情
+          * */
+          wx.navigateTo({url: `piaoDetails?id=${e.currentTarget.dataset.id}`})
+        } else if (status === '立即使用') {
+          console.log(e.currentTarget.dataset.status)
+        }
+      },
+      skipDetails(e) {
+        wx.navigateTo({url: `piaoOrderDetails?id=${e.currentTarget.dataset.id}&status=${e.currentTarget.dataset.status}`})
+      },
+      noHander() {
+        this.clickStatus = true
+        wepy.showLoading({
+          title: '加载中...',
+          mask: true
+        })
+        this.piaoOrderShow()
+      },
+      yesHander() {
+        this.clickStatus = false
+        wepy.showLoading({
+          title: '加载中...',
+          mask: true
+        })
+        this.piaoOrderShow()
+      }
+    }
+    piaoOrderShow() {
+      wepy.request({
+        url: `${this.api}/restapi/orders`,
+        data: {
+          config_id: '622',
+          openid: wx.getStorageSync('openid'),
+          page: 1,
+          'per-page': 30
+        },
+        success: (res) => {
+//          console.log(res.data.data.status)
+          /*
+          * 未使用订单
+          * */
+          if (this.clickStatus) {
+            this.orderArr = []
+            res.data.data.forEach((item) => {
+//              console.log(item)
+              if (item.status == '正常') {
+                item.status = '立即使用'
+                this.orderArr.push(item)
+                this.$apply()
+              }
+            })
+          } else {
+            this.orderArr = []
+            res.data.data.forEach((item) => {
+//              console.log(item)
+              if (item.status == '正常') {
+                item.status = '立即使用'
+                this.orderArr.push(item)
+                this.$apply()
+              } else if(item.status == '未支付') {
+                item.status = '立即支付'
+                this.orderArr.push(item)
+                this.$apply()
+              }
+            })
+            this.$apply()
+          }
+          console.log(this.orderArr)
+          this.tapviewStatus = res.data.data.length > 0 ? false : true
+          wepy.hideLoading()
+          this.$apply()
+        }
+      })
+    }
+    onLoad() {
+      this.api = this.$parent.globalData.api
+      wepy.showLoading({
+        title: '加载中...',
+        mask: true
+      })
+      this.piaoOrderShow()
+    }
+  }
+</script>

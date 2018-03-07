@@ -1,0 +1,102 @@
+<style lang="less">
+  .me_list{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 35rpx;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    font-size: 34rpx;
+    box-sizing: border-box;
+    .view1{
+      display: flex;
+      align-items: center;
+    }
+    .me_right{
+      font-size: 50rpx;
+      color: #aaa;
+    }
+    image{
+      width: 40rpx;
+      height: 40rpx;
+      margin-right: 50rpx;
+    }
+  }
+  .ss{
+    border: 1px solid;
+    height: 100%;
+    view{
+      line-height: 200rpx;
+    }
+  }
+</style>
+<template>
+  <view class="">
+    <personal :userInfo.sync="userInfo"></personal>
+    <!--<view class="me_list">-->
+      <!--<view class="view1">-->
+        <!--<image src="../images/home/2.jpg" mode="scleToFill"></image>-->
+        <!--<text>我的签到</text>-->
+      <!--</view>-->
+      <!--<view class="me_right">></view>-->
+    <!--</view>-->
+    <view class="me_list" @tap="myorder">
+      <view class="view1" >
+        <image src="../images/home/2.jpg" mode="scleToFill"></image>
+        <text>我的订单</text>
+      </view>
+      <view class="me_right">></view>
+    </view>
+    <view class="me_list" @tap="myPiaoOrder">
+      <view class="view1" >
+        <image src="../images/home/2.jpg" mode="scleToFill"></image>
+        <text>我的电子票</text>
+      </view>
+      <view class="me_right">></view>
+    </view>
+    <!--<view class="me_list">-->
+      <!--<view class="view1">-->
+        <!--<image src="../images/home/2.jpg" mode="scleToFill"></image>-->
+        <!--<text>购物车</text>-->
+      <!--</view>-->
+      <!--<view class="me_right">></view>-->
+    <!--</view>-->
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Personal from '../components/personal'
+
+  export default class Me extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人中心'
+    }
+    components = {
+      personal: Personal
+    }
+    data = {
+      userInfo: '',
+      api: ''
+    }
+
+    computed = {
+    }
+
+    methods = {
+      myorder() {
+        wx.navigateTo({url: 'otherpage/memberInfo?index=0'})
+      },
+      myPiaoOrder() {
+        wx.navigateTo({url: 'otherpage/piaoOrder'})
+      }
+    }
+
+    onLoad() {
+      this.userInfo = this.$parent.getUserInfo()
+      this.api = this.$parent.globalData.api
+      this.$apply()
+    }
+  }
+</script>

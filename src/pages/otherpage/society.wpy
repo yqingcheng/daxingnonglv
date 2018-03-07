@@ -1,0 +1,91 @@
+
+<!--------------------------------------关于社会页面----------------------------------------->
+
+<style lang="less">
+  .society{
+    image{
+      width: 100%;
+      height: 200px;
+    }
+    .title{
+      width: 100%;
+      background: #eee;
+      font-size: 32rpx;
+      line-height: 60rpx;
+      padding: 0 0 0 20rpx;
+      box-sizing: border-box;
+    }
+    .title_essay{
+      font-size: 30rpx;
+      padding: 30rpx 45rpx;
+      box-sizing: border-box;
+      width: 100%;
+      color: #888;
+      display: inline-block;
+      text-indent: 30px;
+
+    }
+    .essay{
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 20rpx 95rpx 20rpx 45rpx;
+      box-sizing: border-box;
+      font-size: 30rpx;
+    }
+  }
+</style>
+<template>
+  <view class="society">
+    <image src="../../images/home/2.jpg" mode="scleToFill"></image>
+    <view class="title">
+      平台介绍
+    </view>
+    <text class="title_essay">热尔金额看来如果加了几个看见个屁鸡儿二哥卡罗拉抠门的分类科目可能看了没地方了看过没看见而过来对付美国刻录机开么例如美国科目的风格贷款方面来看
+    </text>
+    <view class="title">
+      合作成员
+    </view>
+    <view style="height: 20rpx; width: 100%"></view>
+    <view wx:for="{{essay_list}}" wx:key="{{item}}" data-id="{{index}}" class="essay" @tap="essaySkip">
+      <text>{{item}}</text>
+      <text>></text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Society extends wepy.page {
+    config = {
+      navigationBarTitleText: '关于社会'
+    }
+    components = {
+    }
+    data = {
+      userInfo: '',
+      essay_list: [
+        '北京老宋瓜王科技发展有限公司',
+        '北京老宋瓜王科技发展有限公司',
+        '北京老宋瓜王科技发展有限公司',
+        '北京老宋瓜王科技发展有限公司'
+      ]
+    }
+
+    computed = {
+    }
+
+    methods = {
+      essaySkip(e) {
+        console.log(e.currentTarget.dataset.id)
+        wx.navigateTo({url: 'societyessay'})
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>

@@ -1,0 +1,86 @@
+
+<style lang="less">
+  .me_list{
+    width: 100%;
+    margin: 10rpx 0 20rpx 0;
+    padding: 0 20rpx 20rpx 20rpx;
+    display: flex;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+    text:nth-child(1){
+      margin: 0;
+      font-size: 30rpx;
+      width: 100%;
+    }
+    view{
+      margin: 20rpx 0;
+      /*display: flex;*/
+      width: 100%;
+      /*justify-content: space-between;*/
+      image{
+        width: 100%;
+        height: 200rpx;
+      }
+    }
+    text:nth-child(3){
+      font-size: 28rpx;
+      color: #aaa;
+      width: 100%;
+    }
+  }
+</style>
+<template>
+  <view class="">
+    <view wx:for="{{me_img}}" wx:key="{{item}}" class="me_list" data-id="{{item.id}}" @tap="skipEssay">
+      <text>{{item.summary}}</text>
+      <view>
+        <image  src="{{api+item.image}}" mode="scleToFill"></image>
+      </view>
+      <text>{{item.created_at}}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Newhuodong extends wepy.page {
+    config = {
+      navigationBarTitleText: '最新活动'
+    }
+    components = {
+    }
+    data = {
+      api: '',
+      me_img: []
+    }
+
+    computed = {
+    }
+
+    methods = {
+      skipEssay(e) {
+        wx.navigateTo({url:'huodongDetail?id=' + e.currentTarget.dataset.id})
+      }
+    }
+
+    onLoad() {
+      this.api = this.$parent.globalData.api
+      wx.request({
+
+        url: this.api + '/restapi/wechat-articles?config_id=622&column_id=149',
+        data: {},
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+          console.log(res)
+          this.me_img = res.data.data
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

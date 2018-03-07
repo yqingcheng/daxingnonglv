@@ -1,0 +1,122 @@
+
+<!--------------------------------------热门景点页面----------------------------------------->
+
+<style lang="less">
+  .sightspot{
+    .nav{
+      width:100%;
+      display: flex;
+      justify-content: space-between;
+      view{
+        width: 23%;
+        margin: 10rpx 0;
+        border-radius: 5px;
+        background: #eee;
+        font-size: 28rpx;
+        box-sizing: border-box;
+        padding: 10rpx 38rpx;
+        text-align: center;
+      }
+    }
+    .sightspot_image{
+      width: 100%;
+      height: 200px;
+    }
+    /*.shop_nav{*/
+      /*display: flex;*/
+      /*width: 100%;*/
+      /*view{*/
+        /*width: 50%;*/
+        /*text-align: center;*/
+        /*padding: 10rpx 0;*/
+        /*font-size: 28rpx;*/
+        /*background: #eee;*/
+        /*border-right: 1px solid #ccc;*/
+      /*}*/
+      /*view:nth-child(3){*/
+        /*border-right: none;*/
+      /*}*/
+    /*}*/
+  }
+</style>
+<template>
+  <view class="sightspot">
+    <!--<view class="nav">-->
+      <!--<view wx:for="{{distance}}" wx:key="{{item}}">{{item}}</view>-->
+    <!--</view>-->
+    <image src="../../images/home/2.jpg" mode="scleToFill" class="sightspot_image"></image>
+    <dianpulist :shop_delicioou.sync="shop_delicioou" :page.sync="page"></dianpulist>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Dianpulist from '../../components/dianpulist'
+  export default class Sightspot extends wepy.page {
+    config = {
+      navigationBarTitleText: '热门景点'
+    }
+    components = {
+      dianpulist: Dianpulist
+    }
+    data = {
+      shop_delicioou: [],
+      page: 'sightspot',
+      api: '',
+      distance: [
+        '100','500','1000','2000'
+      ]
+    }
+    computed = {
+    }
+
+    methods = {
+      /*
+   * 用户下拉触底事件
+   * */
+//      onReachBottom() {
+//        this.number += 1
+//        console.log(this.number, this.pageCount)
+//        if (this.pageCount < this.number) {
+//          return
+//        } else {
+//          wx.request({
+//            url: this.api + '/restapi/goods?page=' + this.number, //商品列表
+//            data: {
+//              config_id: '622',
+//              store_id: this.store_id
+//            },
+//            header: {
+//              'content-type': 'application/json' // 默认值
+//            },
+//            method: 'GET',
+//            success: (res) => {
+//              res.data.data.items.forEach((item) => {
+//                this.all_shop.push(item)
+//                this.$apply()
+//              })
+//            }
+//          })
+//        }
+//      }
+    }
+    onLoad() {
+      this.api = this.$parent.globalData.api
+      wx.request({
+        url: this.api + '/restapi/merchant-store', //店铺列表
+        data: {
+          config_id: 622
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        method: 'GET',
+        success: (res) => {
+          this.shop_delicioou = res.data.data
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

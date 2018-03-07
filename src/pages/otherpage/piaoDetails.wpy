@@ -1,0 +1,187 @@
+
+<!--------------------------------------电子票详情页面----------------------------------------->
+
+<style lang="less">
+  @import "../../mixins/wxParse/wxParse.wxss";
+  .piaodetails{
+    width: 100%;
+    padding: 0 5px;
+    box-sizing: border-box;
+    .piaodetails_name{
+      border: 1px solid #ddd;
+      padding: 20rpx;
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 5px;
+      image{
+        width: 100%;
+        height: 200px;
+      }
+      .name{
+        font-size: 30rpx;
+        color: red;
+        margin: 20rpx;
+      }
+      .detail{
+        font-size: 24rpx;
+      }
+    }
+    .piaodetails_price{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: 20rpx;
+      margin-top: 8px;
+      view:nth-child(1){
+        font-size: 30rpx;
+        color: red;
+      }
+      view:nth-child(2){
+        background: #db3e3e;
+        color: white;
+        font-size: 24rpx;
+        padding: 8rpx 20rpx;
+        border-radius: 3px;
+      }
+    }
+    .piaodetails_sales{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: 20rpx;
+      margin-top: 8px;
+      view{
+        color: #888;
+        font-size: 24rpx;
+      }
+    }
+    .piaodetails_xuzhi{
+      border: 1px solid #ddd;
+      margin-top: 8px;
+      &>view:nth-child(1){
+        background: #eee;
+        font-size: 28rpx;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
+        padding: 16rpx 20rpx;
+      }
+      &>view:nth-child(2){
+        padding: 20rpx;
+        font-size: 24rpx;
+        line-height: 40rpx;
+        box-sizing: border-box;
+        width: 100%;
+        .wxParse-table{
+          width: 100% !important;
+          text-align: left;
+        }
+        image{
+          width: 100%;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="piaodetails">
+    <import src="../../mixins/wxParse/wxParse.wxml"></import>
+    <view class="piaodetails_name">
+      <image src="{{api+thumb}}" mode="scleToFill"></image>
+      <view class="name">{{name}}</view>
+      <view class="detail">{{title}}</view>
+    </view>
+    <view class="piaodetails_price">
+      <view>￥{{price}}</view>
+      <view data-id="{{piaoid}}" @tap="buyPiao">立即购买</view>
+    </view>
+    <view class="piaodetails_sales">
+      <view>销量：{{sales_plus}}</view>
+      <view>有效期至 {{valid_to}}</view>
+    </view>
+    <view class="piaodetails_xuzhi">
+      <view>购买须知</view>
+      <view>
+        <template is="wxParse" data="{{wxParseData: notes.nodes}}"></template>
+      </view>
+    </view>
+    <view class="piaodetails_xuzhi">
+      <view>特别提示</view>
+      <view>{{tips}}</view>
+    </view>
+    <view class="piaodetails_xuzhi">
+      <view>本单详情</view>
+      <view>
+        <template is="wxParse" data="{{wxParseData: detail.nodes}}"></template>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import wxParse from '../../mixins/wxParse/wxParse'
+
+  export default class Piaodetails extends wepy.page {
+    config = {
+      navigationBarTitleText: '电子票详情'
+    }
+    components = {
+    }
+    data = {
+      api: '',
+      thumb: '',
+      name: '',
+      price: '',
+      sales_plus: '',
+      valid_to: '',
+      title: '',
+      tips: '',
+      piaoid: ''
+    }
+    events = {
+    }
+    computed = {
+    }
+
+    methods = {
+      buyPiao(e) {
+        wx.navigateTo({url: `buypiao?id=${e.currentTarget.dataset.id}&name=${this.name}&price=${this.price}`})
+      }
+    }
+    onLoad(options) {
+      this.api = this.$parent.globalData.api
+      this.piaoid = options.id
+      wx.request({
+        url: this.api + '/restapi/products/' + options.id, //电子票详情
+        data: {
+          config_id: '622'
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        method: 'GET',
+        success: (res) => {
+          console.log(res)
+          this.thumb = res.data.data.thumb
+          this.name = res.data.data.name
+          this.price = res.data.data.suggested_price
+//          this.detail = this.$parent.methods.convertHtmlToText(res.data.data.detail)
+//          this.notes = this.$parent.methods.convertHtmlToText(res.data.data.notes)
+          let infos = res.data.data.notes
+          infos = infos.replace(/<img( alt="[\s|a-z|A-Z|0-9|\u4e00-\u9fa5]*")? src="\//g, `<img src="${this.api}/`)
+          wxParse.wxParse('notes', 'html', infos, this)
+          this.sales_plus = res.data.data.sales_plus
+          this.valid_to = res.data.data.valid_to
+          this.title = res.data.data.title
+          this.tips = res.data.data.tips
+          let info = res.data.data.detail
+          info = info.replace(/<img( alt="[\s|a-z|A-Z|0-9|\u4e00-\u9fa5]*")? src="\//g, `<img src="${this.api}/`)
+          wxParse.wxParse('detail', 'html', info, this)
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

@@ -1,0 +1,90 @@
+
+<!---------------------------------商品序列组件---------------------------------------------->
+
+<style lang="less">
+  .allshop_list{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .shop_list{
+      width: 370rpx;
+      display: flex;
+      flex-direction: column;
+      .shop_list_img{
+        width: 370rpx;
+        height: 370rpx;
+      }
+      text{
+        font-size: 26rpx;
+        margin: 15rpx 10rpx 20rpx 10rpx;
+        overflow : hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
+      .shop_delicious{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10rpx;
+        box-sizing: border-box;
+        margin-bottom: 20rpx;
+        view:nth-child(1){
+          color: red;
+          font-weight: 600;
+          font-size: 28rpx;
+          /*text-decoration: line-through;*/
+        }
+        view:nth-child(2){
+          font-size: 24rpx;
+          color: #aaa;
+          vertical-align: middle;
+          image{
+            width: 25rpx;
+            height: 25rpx;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="allshop_list">
+    <view wx:for="{{shop_list}}" wx:key="{{item}}" class="shop_list" data-id="{{item.id}}" @tap="shopSkip">
+      <image src="{{api+item.thumb}}" mode="scleToFill" class="shop_list_img"></image>
+      <text>{{item.name}}</text>
+      <view class="shop_delicious">
+        <view>￥{{item.price}}</view>
+        <view>
+          <image src="../images/life.jpg" mode="scleToFill"></image>
+          {{item.sales}}人付款
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Allshop extends wepy.component {
+    props = {
+      shop_list: {
+        type: Array,
+        coerce: function (v) {
+          return v
+        }
+      }
+    }
+    data = {
+      api: ''
+    }
+    methods = {
+      shopSkip(e) {
+        wx.navigateTo({url: 'otherpage/shopdetails?id=' + e.currentTarget.dataset.id})
+      }
+    }
+    onLoad() {
+      this.api = this.$parent.$parent.globalData.api
+    }
+  }
+</script>

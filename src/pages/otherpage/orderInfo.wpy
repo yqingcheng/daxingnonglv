@@ -1,0 +1,422 @@
+
+<style lang="scss">
+  .tit{
+    font-size: 28rpx;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 20rpx 20rpx;
+    align-items: center;
+    background: #EEEBE9;
+    .addre_name{
+      view:nth-child(1){
+        font-size: 32rpx;
+        float: left;
+        font-weight: 600;
+        margin-right: 80rpx;
+        margin-left: 40rpx;
+      }
+      view:nth-child(2){
+        font-size: 32rpx;
+        font-weight: 600;
+      }
+      view:nth-child(3){
+        margin-top: 10rpx;
+        display: flex;
+        align-items: center;
+        image{
+          width: 18px;
+          height: 18px;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+    .order_info{
+        &_wrap{
+            padding-bottom: 100rpx;
+        }
+        &_goods{
+            padding: 0 30rpx;
+            border-bottom: 12rpx solid #fafafa;
+            &_title{
+                line-height: 60rpx;
+                font-size: 32rpx;
+                text-align: right;
+                border-bottom: 1px solid #dedede;
+                margin-right: -30rpx;
+                padding-right: 30rpx;
+            }
+
+            &_items{
+                display: flex;
+                border-bottom: 1px solid #dedede;
+                margin-bottom: 14rpx;
+            }
+            &_msg{
+                margin-left: 24rpx;
+                flex-grow: 1;
+                position: relative;
+            }
+            &_thumb{
+                $imgSize: 160rpx;
+                width: $imgSize;
+                height: $imgSize;
+                background: {
+                    size: cover;
+                }
+            }
+            &_name{
+                display: flex;
+                font-size: 32rpx;
+                line-height: 50rpx;
+                view:first-child{
+                    width: 10em;
+                    flex-grow: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+                view:last-child{
+                    flex-shrink: 0;
+                    padding-left: 12rpx;
+                }
+            }
+            &_model{
+                font-size: 28rpx;
+                color: #ccc;
+            }
+            &_price{
+                line-height: 50rpx;
+                font-size: 30rpx;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+            }
+        }
+        &_msg{
+            padding: 12rpx 30rpx;
+            border-bottom: 12rpx solid #fafafa;
+            &_items{
+                font-size: 32rpx;
+                line-height: 50rpx;
+                border-bottom: 1px solid #ccc;
+            }
+        }
+        &_kefu{
+            display: flex;
+            padding: 0 30rpx;
+            justify-content: space-between;
+            view{
+                width: 48%;
+                height: 60rpx;
+                line-height: 60rpx;
+                position: relative;
+                text-align: center;
+                border: 1px solid #ccc;
+                border-radius: 14rpx;
+            }
+            .contact{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                left: 0;top: 0;
+                opacity: 0;
+                z-index: 9;
+            }
+            .wx-contact-button-wrapper{
+                width: 100%;
+                height: 100%;
+            }
+        }
+        &_bar{
+            display: flex;
+            width: 100%;
+            height: 100rpx;
+            line-height: 100rpx;
+            border-top: 1px solid #ccc;
+            background-color: #fff;
+            position: fixed;
+            left: 0;bottom: 0;
+            &_price{
+                flex-grow: 1;
+                text-align: right;
+                padding-right: 36rpx;
+                color: #fc2626;
+                display: flex;
+                font-size: 32rpx;
+                view{
+                    flex: 1;
+                    text{
+                        font-size: 24rpx;
+                    }
+                }
+            }
+            &_btn{
+                width: 160rpx;
+                flex-shrink: 0;
+                text-align: center;
+                font-size: 36rpx;
+                color: #fff;
+                background-color: #d64723;
+            }
+        }
+    }
+  .solid{
+    width: 100%;
+    height: 3px;
+    background: url("../../images/solid.png") repeat center;
+    /*background-size: 30px 10px;*/
+  }
+</style>
+
+<template>
+
+    <view class="order_info_wrap">
+        <!-- 地址 -->
+        <!-- <view class="border" style="background-image: url(../image/border.png)"></view> -->
+        <view class="order_info_address" wx:if="{{address.userName}}">
+
+            <view class="order_info_address_left_icon">
+                <view class="iconfont icon-dizhi"></view>
+            </view>
+            <view class="order_info_address_msg" >
+              <view class="tit">
+                <view class="addre_name">
+                  <view>
+                    {{address.userName}}
+                  </view>
+                  <view>
+                    {{address.telNumber}}
+                  </view>
+                  <view>
+                    <image src="../../images/address.png" mode="scleToFill"></image>
+                    {{address.provinceName}}{{address.cityName}}{{address.countyName}}{{address.detailInfo}}
+                  </view>
+                </view>
+                <view></view>
+              </view>
+              <view class="solid" style="background-image: url(../../images/solid.png)"></view>
+
+            </view>
+            <view class="order_info_address_right_icon">
+                <view class="iconfont icon-shuangjiantou"></view>
+            </view>
+        </view>
+
+        <view class="order_info_goods">
+            <view class="order_info_goods_title">
+                {{goods.title}}
+            </view>
+
+            <repeat for="{{goods.items}}">
+                <view class="order_info_goods_items">
+                    <view class="order_info_goods_thumb" style="background-image: url({{item.thumb}})"></view>
+                    <view class="order_info_goods_msg">
+                        <view class="order_info_goods_name">
+                            <view>
+                                {{item.goods_name}}
+                            </view>
+                            <view>
+                                x {{item.quantity}}
+                            </view>
+                        </view>
+                        <view class="order_info_goods_model">
+                            {{item.props}}
+                        </view>
+                        <view class="order_info_goods_price">
+                            {{item.price}}
+                        </view>
+                    </view>
+                </view>
+            </repeat>
+
+        </view>
+
+        <view class="order_info_msg">
+            <view class="order_info_msg_items">
+                <text>订单编号: </text> {{infoMsg.id}}
+            </view>
+            <view class="order_info_msg_items">
+                <text>下单时间: </text> {{infoMsg.createdTime}}
+            </view>
+            <view class="order_info_msg_items">
+                <text>商品合计: </text> {{infoMsg.price}}
+            </view>
+            <view class="order_info_msg_items">
+                <text>优惠价格: </text> {{infoMsg.couponPrice}}
+            </view>
+            <view class="order_info_msg_items">
+                <text>商品运费: </text> {{infoMsg.expressFee}}
+            </view>
+        </view>
+
+        <!-- 客服 -->
+        <view class="order_info_kefu">
+            <view>
+                联系客服
+                <contact-button class="contact" ></contact-button>
+            </view>
+            <view @tap="cancelOrder" id="{{infoMsg.id}}" wx:if="{{statusBol}}">
+                取消订单
+            </view>
+            <view wx:if="{{logistics}}" @tap="logisticsActive" id="{{infoMsg.id}}">
+                查看物流
+            </view>
+        </view>
+
+        <!-- 底部button -->
+        <view class="order_info_bar" wx:if="{{cancelBarBol}}">
+            <view class="order_info_bar_price">
+
+                <view>
+                    <text>已优惠: </text>{{infoMsg.couponPrice}}
+                </view>
+                <view>
+                    <text>应付: </text>{{realPrice}}
+                </view>
+
+            </view>
+            <view class="order_info_bar_btn" id="{{infoMsg.id}}" @tap="payActive">
+                结算
+            </view>
+        </view>
+        <toast />
+    </view>
+
+</template>
+
+<script>
+
+    import wepy from 'wepy'
+    import retainedDecimalMoney from '../../mixins/retainedDecimalMoney'
+    import patMethod from '../../mixins/pay'
+    import Toast from 'wepy-com-toast'
+
+    export default class orderInfo extends wepy.page {
+      config = {
+        navigationBarTitleText: '订单详情'
+      }
+        data = {
+            address: {},
+            goods: {},
+            infoMsg: {},
+            allPrice: '￥0.00',
+            statusBol: false,
+            cancelBarBol: false,
+            logistics: false
+        }
+        components = {
+            toast: Toast
+        }
+        computed = {
+            realPrice: () => {
+                if(this.infoMsg.price) {
+                    let price = this.infoMsg.price.substr(1) - this.infoMsg.couponPrice.substr(1)
+                    return retainedDecimalMoney(price)
+                }
+            }
+        }
+        methods = {
+            logisticsActive(e){
+                const id = e.currentTarget.id
+                wepy.navigateTo({
+                    url: `logistics?id=${id}`
+                })
+            },
+            payActive(e){
+                console.log(e.currentTarget.id)
+                const id = e.currentTarget.id
+                patMethod.call(this, {
+                    data: {
+                        id: id,
+                        config_id: '622',
+                        openid: wx.getStorageSync('openid')
+                    }
+                })
+            },
+            cancelOrder(e){
+                wepy.showLoading({
+                    title: '加载中...'
+                })
+                const id = e.currentTarget.id
+                wepy.request({
+                    url: `${this.api_host}/restapi/goods-orders/${id}`,
+                    data: {
+                        config_id: '622',
+                        openid: wx.getStorageSync('openid')
+                    },
+                    method: 'DELETE',
+                    success: (res) => {
+                        wepy.hideLoading()
+                        this.$invoke("toast", "show", {
+                            title: res.data.data.status,
+                            imgClassName: "iconfont icon-shibaibiaoqing icon_size"
+                        })
+                        setTimeout(() => {
+                            wepy.navigateBack({
+                                delta: 1
+                            })
+                        }, 100);
+
+                    }
+                })
+            }
+        }
+        getOrderInfo(id){
+            wepy.request({
+                url: `${this.api_host}/restapi/goods-orders/${id}`,
+                data: {
+                    config_id: '622',
+                    expand: 'goods'
+                },
+                success: (res) => {
+//                    console.log(res.data.data)
+                    const data = res.data.data
+                    this.address = {
+                        userName: data.real_name,
+                        telNumber: data.mobile,
+                        provinceName: data.province,
+                        cityName: data.city,
+                        countyName: data.county,
+                        detailInfo: data.address
+                    }
+                    let items = data.goods.map( item => {
+                        return {
+                            goods_id: item.goods_id,
+                            goods_name: item.goods_name,
+                            price: retainedDecimalMoney(item.price),
+                            props: item.props,
+                            quantity: item.quantity,
+                            thumb: item.thumb
+                        }
+                    })
+                    this.goods = {
+                        title: data.status,
+                        items: items
+                    }
+                    this.infoMsg = {
+                        id: data.id,
+                        price: retainedDecimalMoney(data.goods_price),
+                        couponPrice: retainedDecimalMoney(data.coupon_price),
+                        createdTime: data.created_at,
+                        expressFee: '￥0.00'
+                    }
+                    this.$apply()
+                }
+            })
+        }
+
+        onLoad(option){
+            this.api_host = this.$parent.globalData.api
+//            console.log(option.status)
+            this.statusBol = option.status == '待付款' || option.status == '待发货' ? true : false
+            this.cancelBarBol = option.status == '待付款' ? true : false
+//            console.log(this.cancelBarBol)
+            this.logistics = option.status == '已发货' ? true : false
+            this.getOrderInfo(option.id)
+        }
+    }
+
+</script>
+

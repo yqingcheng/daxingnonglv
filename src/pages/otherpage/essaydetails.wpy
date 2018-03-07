@@ -1,0 +1,63 @@
+
+<!--------------------------------------农旅之窗文章详情----------------------------------------->
+
+<style lang="less">
+  .essaydetails_vie{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    view:nth-child(1){
+      font-weight: 600;
+      font-size: 34rpx;
+      margin: 30rpx 0 0 0;
+    }
+    view:nth-child(2){
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10rpx;
+      width: 300rpx;
+      color: #888;
+      line-height: 80rpx;
+      font-size: 28rpx;
+    }
+    image{
+      width: 350rpx;
+      height: 250rpx;
+    }
+  }
+</style>
+<template>
+  <view class="essaydetails">
+    <view class="essaydetails_vie">
+      <view>大兴农旅召开2017全国农产品交易大会</view>
+      <view>
+        <text>作者：乔东</text>
+        <text>2017-9-04</text>
+      </view>
+      <image src="../../images/home/1.jpg" mode="scleToFill"></image>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Essaydetails extends wepy.page {
+    config = {
+      navigationBarTitleText: '农旅之窗'
+    }
+    components = {
+    }
+    data = {
+    }
+    events = {
+    }
+    computed = {
+    }
+    methods = {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

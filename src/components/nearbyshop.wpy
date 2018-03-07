@@ -1,0 +1,128 @@
+
+<!---------------------------------附近商品列---------------------------------------------->
+
+<style lang="less">
+  .shop_delicioous{
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding: 10rpx;
+    display: flex;
+    box-sizing: border-box;
+    image{
+      height: 190rpx;
+      flex: 0 0 190rpx;
+    }
+    .shop_data{
+
+      flex: 1;
+      height: 190rpx;
+      width: auto;
+      margin: 0 45rpx 0 30rpx;
+      position: relative;
+      .view1{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        text:nth-child(1){
+          font-size: 32rpx;
+        }
+      }
+      .view3{
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        .price_shop{
+          display: flex;
+          view:nth-child(1){
+            font-weight: 600;
+            font-size: 26rpx;
+            color: red;
+            margin-right: 15rpx;
+          }
+          view:nth-child(2){
+            color: #aaa;
+            font-weight: 600;
+            text-decoration: line-through;
+            font-size: 26rpx;
+          }
+        }
+        .buy{
+          background: #FF5312;
+          padding: 9rpx 40rpx;
+          box-sizing: border-box;
+          color: white;
+          font-size: 26rpx;
+          border-radius: 6rpx;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="nearbyshop">
+    <view class="shop_delicioous" wx:for="{{shop_delicioous}}" wx:key="{{item}}" data-id="{{item.id}}" @tap="shopSkip">
+      <image src="{{api+item.thumb}}" mode="scleToFill"></image>
+      <view class="shop_data">
+        <view class="view1">
+          <text>{{item.name}}</text>
+          <text>{{item.diatance}}</text>
+        </view>
+        <view class="view3">
+          <view class="price_shop">
+            <view>￥{{item.price}}</view><view>￥{{item.market_price}}</view>
+          </view>
+          <view class="buy" data-id="{{item.id}}" catchtap="buySkip">购买</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Nearbyshop extends wepy.component {
+    props = {
+      shop_delicioous: {
+        type: Array,
+        coerce: function (v) {
+          return v
+        }
+      }
+//      num: {
+//        type: Number,
+//        coerce: function (v) {
+//          return v
+//        }
+//      }
+    }
+    data = {
+      api: ''
+    }
+    methods = {
+      shopSkip(e) {
+        wx.navigateTo({url: 'shopdetails?id=' + e.currentTarget.dataset.id})
+//        if (this.num === 0) {
+//          wx.navigateTo({url: 'otherpage/shopdetails'})
+//          wx.navigateTo({url: 'otherpage/shopdetails?id=' + e.currentTarget.dataset.id})
+//        } else {
+//          wx.navigateTo({url: 'shopdetails'})
+//        }
+      },
+      buySkip(e) {
+        wx.navigateTo({url: 'payorder?id=' + e.currentTarget.dataset.id})
+//        if (this.num === 0) {
+//          wx.navigateTo({url: 'otherpage/payorder'})
+//        } else {
+//          wx.navigateTo({url: 'payorder'})
+//        }
+      }
+    }
+    onLoad() {
+      this.api = this.$parent.$parent.globalData.api
+    }
+  }
+</script>

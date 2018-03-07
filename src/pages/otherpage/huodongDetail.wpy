@@ -1,0 +1,52 @@
+
+<style lang="less">
+  .essay_title{
+    font-size: 30rpx;
+    padding: 0 20rpx;
+  }
+</style>
+<template>
+  <view >
+    <view class="essay_title">
+      {{content}}
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class HuodongDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '今日头条'
+    }
+    components = {
+    }
+    data = {
+      api: '',
+      content:''
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    onLoad(options) {
+      this.api = this.$parent.globalData.api
+      wx.request({
+        url: this.api + '/restapi/wechat-articles/' + options.id + '?config_id=622',
+        data: {},
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+          this.content = this.$parent.methods.convertHtmlToText(res.data.data.content)
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

@@ -1,0 +1,483 @@
+
+<!--------------------------------------支付订单页面----------------------------------------->
+
+<style lang="less">
+  .payorder_block{
+    .tit{
+      font-size: 28rpx;
+
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 20rpx 20rpx;
+      align-items: center;
+      background: #EEEBE9;
+      .addre_name{
+        view:nth-child(1){
+          font-size: 32rpx;
+          float: left;
+          font-weight: 600;
+          margin-right: 80rpx;
+          margin-left: 40rpx;
+        }
+        view:nth-child(2){
+          font-size: 32rpx;
+          font-weight: 600;
+        }
+        view:nth-child(3){
+          margin-top: 10rpx;
+          display: flex;
+          align-items: center;
+          image{
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+    .detial{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 20rpx;
+      height: 280rpx;
+      image{
+        width: 280rpx;
+        height: 280rpx;
+        margin-right: 50rpx;
+      }
+      view{
+        display: flex;
+        text{
+          font-size: 30rpx;
+          line-height: 60rpx;
+        }
+        flex-direction: column;
+        text:nth-child(1){
+          font-size: 30rpx;
+          line-height: 60rpx;
+        }
+        text:nth-child(2){
+          font-size: 28rpx;
+          text-decoration: line-through;
+          line-height: 60rpx;
+        }
+        text:nth-child(3){
+          font-size: 32rpx;
+          color: red;
+          font-weight: 600;
+        }
+      }
+    }
+    .num_shop{
+      border-bottom: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+      font-size: 28rpx;
+      padding: 20rpx 15rpx;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .tel{
+        margin-right: 250rpx;
+      }
+      .num{
+        display: flex;
+        flex-direction: row;
+        view:nth-child(1),view:nth-child(3){
+          border: 1px solid;
+          width: 60rpx;
+          height: 60rpx;
+          border-radius: 60rpx;
+          text-align: center;
+          line-height: 53rpx;
+          font-size: 60rpx;
+        }
+        text{
+          width: 140rpx;
+          border: 1px solid;
+          height: 60rpx;
+          text-align: center;
+          line-height: 60rpx;
+          margin:  0 20rpx;
+          font-size: 32rpx;
+        }
+      }
+    }
+  }
+  .price{
+    position: absolute;
+    bottom:55px;
+    display: flex;
+    right: 30rpx;
+    font-size: 30rpx;
+    flex-direction: column;
+    line-height: 50rpx;
+    view:nth-child(1){
+      display: flex;
+      text{
+        color: red;
+        font-size: 26rpx;
+        padding-left: 20rpx;
+      }
+    }
+    view:nth-child(2){
+      display: flex;
+      text{
+        color: red;
+        font-size: 28rpx;
+        margin-left: 20rpx;
+      }
+    }
+  }
+  .buybtn{
+    position: fixed;
+    bottom: 0;
+    height: 100rpx;
+    background: #eee;
+    width: 100%;
+    view:nth-child(1){
+      button{
+        display: flex;
+        position: absolute;
+        background: #eee;
+        left: 25rpx;
+        border: 1px solid #eee;
+        flex-direction: row;
+        align-items: center;
+        image{
+          width: 100rpx;
+        }
+        text{
+          font-size: 26rpx;
+          line-height: 30rpx;
+        }
+      }
+      button::after {
+        border:1px solid rgba(0, 0, 0, 0);
+      }
+    }
+    view:nth-child(2){
+      text-align: center;
+      display: inline-block;
+      line-height: 100rpx;
+      background: #FF5312;
+      position: absolute;
+      right: 0;
+      height: 100rpx;
+      color: white;
+      font-size: 32rpx;
+      width: 240rpx;
+    }
+  }
+  .solid{
+    width: 100%;
+    height: 3px;
+    /*background: url("../../images/solid.png") repeat center;*/
+    /*background-size: 30px 10px;*/
+  }
+</style>
+<template>
+  <view class="payorder">
+    <view class="payorder_block">
+      <view class="tit" wx:if="{{code == 0}}" @tap="address">
+        <view >
+          请添加收货地址
+        </view>
+        <view>></view>
+      </view>
+
+      <view class="tit" wx:if="{{code == 1}}" @tap="address">
+        <view class="addre_name">
+          <view>
+            {{userName}}
+          </view>
+          <view>
+            {{telNumber}}
+          </view>
+          <view>
+            <image src="../../images/address.png" mode="scleToFill"></image>
+            {{address}}
+          </view>
+        </view>
+        <view>></view>
+      </view>
+      <view class="solid" style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAKBAMAAACOO0tGAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAnUExURf///4u16Oxtbezz/J3B7NDh9vvd3fSmprjS8vGNje57e/jDw/7w8IQ3dnAAAABSSURBVCjPY2CAAG4l7GADVJ4hUBArEIXJJ2HXrw6TZ8auX7ABKs+zCLsBE2AGmGDXLwKT58SuX+sATIEjdgOcYfJF2A1Qg8lz4PCBwWgQUiMIAWCaOFG2MdFRAAAAAElFTkSuQmCC)"></view>
+      <view class="detial">
+        <image src="{{api+thumb}}" mode="scleToFill"></image>
+        <view>
+          <text>{{name}}</text>
+          <text>￥{{market_price}}</text>
+          <text>￥{{price}}</text>
+          <text>库存：{{stock}}</text>
+        </view>
+      </view>
+      <view class="num_shop">
+        <view class="tel">购买数量</view>
+        <view class="num">
+          <view @tap="reduce">-</view>
+          <text>{{numb}}</text>
+          <view @tap="add">+</view>
+        </view>
+      </view>
+    </view>
+    <view class="price">
+      <view>运费:<text>{{freight}}元</text></view>
+      <view>合计:<text>{{heji}}元</text></view>
+    </view>
+    <view class="buybtn">
+      <view>
+        <button open-type="contact">
+          <image src="../../images/kefu1.png" mode="widthFix" class="kefu"></image>
+          <text>联系客服</text>
+        </button>
+      </view>
+      <view @tap="paySkip" data-id="{{goodsid}}">立即支付</view>
+    </view>
+    <modal></modal>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Modal from '../../components/Modal'
+
+  export default class Payorder extends wepy.page {
+    config = {
+      navigationBarTitleText: '确认订单'
+    }
+    components = {
+      modal: Modal
+    }
+    data = {
+      userName: '',
+      telNumber: '',
+      address: '',
+      code: 0,
+      numb: 1,
+      heji: '',
+      api: '',
+      thumb: '',
+      name: '',
+      price: '',
+      market_price: '',
+      freight: '',
+      goodsid: '',
+      dizhi: {},
+      stock: 0
+    }
+    events = {
+    }
+    computed = {
+    }
+    onLoad(options) {
+      this.api = this.$parent.globalData.api
+      this.goodsid = options.id
+      this.$apply()
+      /*
+      * 商品详情数据请求
+      * */
+      wx.request({
+        url: this.api + '/restapi/goods/' + options.id,
+        data: {
+          config_id: '622'
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+          this.thumb = res.data.data.thumb
+          this.name = res.data.data.name
+          this.price = (res.data.data.price).toFixed(2)
+          this.heji = (res.data.data.price * 1 + res.data.data.freight * 1).toFixed(2)
+          this.market_price = res.data.data.market_price
+          this.freight = res.data.data.freight
+          this.stock = res.data.data.stock
+          this.$apply()
+        }
+      })
+    }
+    methods = {
+      /*
+      * 立即支付
+      * */
+      paySkip() {
+//        console.log(this.numb, this.stock)
+        let openid = wx.getStorageSync('openid')
+        if (openid) {
+          if (!this.userName) {
+            wx.showToast({
+              title: '请选择地址',
+              image: '../../images/fals.png',
+              duration: 2000,
+              mask: true
+            })
+          } else {
+//            console.log(this.numb)
+            if (this.numb > this.stock) {
+              wx.showToast({
+                title: '库存不足',
+                image: '../../images/fals.png',
+                duration: 2000,
+                mask: true
+              })
+            } else {
+              /*
+            * 创建订单
+            * */
+              wx.request({
+                url: this.api + '/restapi/goods-orders',
+                data: {
+                  config_id: '622',
+//                merchant_id : '622',
+                  real_name: this.dizhi.userName,
+                  mobile: this.dizhi.telNumber,
+                  province: this.dizhi.provinceName,
+                  city: this.dizhi.cityName,
+                  county: this.dizhi.countyName,
+                  address: this.dizhi.detailInfo,
+                  zip: this.dizhi.nationalCode,
+                  goods_price: this.heji,
+                  openid: openid,
+                  source: '小程序',
+                  items: [
+                    {
+                      goods_id: this.goodsid,
+                      goods_name: this.name,
+                      skucode: this.freight,
+                      props: '',
+                      price: this.price,
+                      quantity: this.numb,
+                      thumb: this.api + this.thumb
+                    }
+                  ]
+                },
+                header: {
+                  'content-type': 'application/json'
+                },
+                method: 'POST',
+                /*
+                * 调起支付接口
+                * */
+                success: (res) => {
+//                console.log(res.data.data, 2)
+                  wx.requestPayment({
+                    'timeStamp': res.data.data.timeStamp,
+                    'nonceStr': res.data.data.nonceStr,
+                    'package': res.data.data.package,
+                    'signType': 'MD5',
+                    'paySign': res.data.data.paySign,
+                    'success': (res) => {
+                      console.log(res)
+                      wx.navigateTo({url: 'payok'})
+                    },
+                    'fail': (res) => {
+                      /*
+                      * 商品详情数据请求
+                      * */
+                      wx.request({
+                        url: this.api + '/restapi/goods/' + this.goodsid,
+                        data: {
+                          config_id: '622'
+                        },
+                        header: {
+                          'content-type': 'application/json'
+                        },
+                        method: 'GET',
+                        success: (res) => {
+                          this.thumb = res.data.data.thumb
+                          this.name = res.data.data.name
+                          this.price = (res.data.data.price).toFixed(2)
+                          this.heji = (res.data.data.price * 1 + res.data.data.freight * 1).toFixed(2)
+                          this.market_price = res.data.data.market_price
+                          this.freight = res.data.data.freight
+                          this.stock = res.data.data.stock
+                          this.$apply()
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          }
+        } else {
+          /*
+          * 用户授权
+          * */
+          this.$invoke('modal', 'show', {
+            content: '您还没有授权登录',
+            specialType: 'getUserInfo',
+            specialText: '登录',
+            showCancel: false,
+            success: (res) => {
+              if(res.data.userInfo) {
+                this.inspectUserLogin = true
+                this.$parent.getUserInfo()
+              }
+            }
+          })
+//          wx.openSetting({
+//            success: (res) => {
+//              if (res.authSetting['scope.userInfo']) {
+//                this.$parent.getUserInfo()
+//              }
+//            }
+//          })
+        }
+      },
+      reduce() {
+        if (this.numb == 1) {
+          this.numb = 1
+        } else {
+          this.numb -= 1
+          this.heji = (this.price * this.numb + this.freight * 1).toFixed(2)
+        }
+        this.$apply()
+      },
+      /*
+     * 购买数量加
+     * */
+      add() {
+        if (this.numb >= this.stock) {
+          wx.showToast({
+            title: '库存不足',
+            image: '../../images/fals.png',
+            duration: 2000,
+            mask: true
+          })
+        } else {
+          this.numb += 1
+          this.heji = (this.price * this.numb + this.freight * 1).toFixed(2)
+        }
+      },
+      /*
+      * 收货地址
+      * */
+      address() {
+        wx.chooseAddress({
+          success: (res) => {
+            if (res) {
+              this.code = 1
+            }
+            this.userName = res.userName
+            this.telNumber = res.telNumber
+            this.address = res.provinceName + res.cityName + res.countyName + res.detailInfo
+            this.dizhi = res
+            this.$apply()
+            console.log(res.userName)
+            console.log(res.postalCode)
+            console.log(res.provinceName)
+            console.log(res.cityName)
+            console.log(res.countyName)
+            console.log(res.detailInfo)
+            console.log(res.nationalCode)
+            console.log(res.telNumber)
+          }
+        })
+      }
+    }
+  }
+</script>

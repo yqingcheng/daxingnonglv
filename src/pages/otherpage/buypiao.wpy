@@ -1,0 +1,224 @@
+<!------------------------------------------电子票购买----------------------------------------------------->
+
+<style lang="less">
+  .buypiao{
+    padding: 0 20rpx;
+    width: 100%;
+    box-sizing: border-box;
+    .buypiao_name {
+      display: flex;
+      align-items: center;
+      margin: 10rpx 0;
+      view:nth-child(1) {
+        font-size: 32rpx;
+      }
+      view:nth-child(2) {
+        font-size: 30rpx;
+        color: red;
+      }
+    }
+    .num{
+      view{
+        font-size: 30rpx;
+        line-height: 50rpx;
+      }
+      input{
+        width:100%;
+        font-size: 26rpx;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 1px 5px;
+        box-sizing: border-box;
+        margin: 3px 0;
+        vertical-align: middle;
+        height: auto;
+      }
+    }
+    .price{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 50rpx;
+      font-size: 30rpx;
+      view:nth-child(2){
+        color: red;
+      }
+    }
+    .buy{
+      width:100%;
+      font-size: 26rpx;
+      line-height: 56rpx;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 1px 5px;
+      box-sizing: border-box;
+      margin: 3px 0;
+      background: #db3e3e;
+      color: white;
+      text-align: center;
+    }
+  }
+</style>
+<template>
+  <view class="buypiao">
+    <view class="buypiao_name">
+      <view>{{obj.name}}</view>
+      <view>￥{{obj.price}}</view>
+    </view>
+    <view class="num">
+      <view>数量</view>
+      <input type="number" @input="inputHander" placeholder="请输入数量">
+    </view>
+    <view class="num">
+      <view>下单手机号号</view>
+      <input type="number" @input="inputHanders" placeholder="请输入用于接受电子码的手机号">
+    </view>
+    <view class="price">
+      <view>总计</view>
+      <view>￥{{obj.prices}}</view>
+    </view>
+    <view class="buy" @tap="buyHander">立即购买</view>
+    <modal></modal>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Toast from 'wepy-com-toast'
+  import Modal from '../../components/Modal'
+
+  export default class Buypiao extends wepy.page {
+    config = {
+      navigationBarTitleText: '购买电子票'
+    }
+
+    onLoad(option) {
+      this.api = this.$parent.globalData.api
+      this.obj['name'] = option.name
+      this.obj['prices'] = this.obj['price'] = option.price
+//      this.obj['prices'] = this.obj['price'] = 0.01 * 1
+      this.obj['ids'] = option.id
+      this.$apply()
+    }
+    components = {
+      toast: Toast,
+      modal: Modal
+    }
+    data = {
+      api: '',
+      obj: {},
+      index: true
+    }
+    methods = {
+      inputHander(e) {
+        this.obj['namevalue'] = e.detail.value
+        if (this.obj.namevalue) {
+          this.obj.prices = (this.obj.namevalue * this.obj.price).toFixed(2)
+        } else {
+          this.obj.prices = (1 * this.obj.price).toFixed(2)
+        }
+        this.$apply()
+      },
+      inputHanders(e) {
+        this.obj['phonevalue'] = e.detail.value
+      },
+      buyHander(e) {
+        let openid = wx.getStorageSync('openid')
+        let reg = /^-?[1-9]\d*$/
+        let regs = /^1[0-9]{10}$/
+        if (this.index) {
+          if (reg.test(this.obj.namevalue) && regs.test(this.obj.phonevalue)) {
+            if (openid) {
+              this.index = false
+              this.$apply()
+              wx.request({
+                url: this.api + '/restapi/wxorders',  //电子票下单
+                data: {
+                  config_id: '622',
+                  openid: openid,
+                  the_openid: openid, //支付openid
+                  product_id: this.obj.ids,
+                  price: this.obj.prices,
+                  quantity: this.obj.namevalue,
+                  mobile: this.obj.phonevalue
+                },
+                header: {
+                  'content-type': 'application/json'
+                },
+                method: 'POST',
+                success: (res) => {
+                  console.log(res)
+                  wx.requestPayment({
+                    'timeStamp': res.data.data.timeStamp,
+                    'nonceStr': res.data.data.nonceStr,
+                    'package': res.data.data.package,
+                    'signType': 'MD5',
+                    'paySign': res.data.data.paySign,
+                    'success': (res) => {
+                      console.log(res)
+                      wx.navigateTo({url: 'payok'})
+                      wx.request({
+                        url: `${this.api}/restapi/sms-codes`,
+                        data: {
+                          config_id: '622',
+                          mobile : this.obj.phonevalue,
+                          apps_openid: openid
+                        },
+                        header: {
+                          'content-type': 'application/json'
+                        },
+                        method: 'POST',
+                        success: (res) => {
+                          console.log(res)
+                        }
+                      })
+                    },
+                    'fail': (res) => {
+                      console.log(res)
+                      this.index = true
+                      this.$apply()
+                    }
+                  })
+                }
+              })
+            } else {
+              /*
+            * 用户授权
+            * */
+              this.$invoke('modal', 'show', {
+                content: '您还没有授权登录',
+                specialType: 'getUserInfo',
+                specialText: '登录',
+                showCancel: false,
+                success: (res) => {
+                  if (res.data.userInfo) {
+                    this.inspectUserLogin = true
+                    this.$parent.getUserInfo()
+                  }
+                }
+              })
+            }
+          } else if (reg.test(this.obj.namevalue)) {
+            wepy.showToast({
+              title: '手机号有误，请重...',
+              image: '../../images/fals.png'
+            })
+          } else if (regs.test(this.obj.phonevalue)) {
+            wepy.showToast({
+              title: '数量有误，请重...',
+              image: '../../images/fals.png'
+            })
+          } else {
+            wepy.showToast({
+              title: '数量有误，请重...',
+              image: '../../images/fals.png'
+            })
+          }
+        } else {
+          return
+        }
+      }
+    }
+  }
+</script>

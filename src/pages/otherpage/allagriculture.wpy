@@ -1,0 +1,141 @@
+
+<!-------------------------------农业大全页面------------------------------>
+
+<style lang="less">
+
+</style>
+<template>
+  <view class="allagriculture">
+    <search></search>
+    <sort></sort>
+    <nearbyshop :shop_delicioous.sync="shop_delicioous"></nearbyshop>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Search from '../../components/search'
+  import Nearbyshop from '../../components/nearbyshop'
+  import Sort from '../../components/sort'
+
+  export default class Allagriculture extends wepy.page {
+    config = {
+      navigationBarTitleText: '农品大全'
+    }
+    components = {
+      search: Search,
+      nearbyshop: Nearbyshop,
+      sort: Sort
+    }
+    data = {
+      shop_delicioous: [],
+      number: 1,
+      pageCount: '',
+      sort: '',
+      list: '',
+      name: ''
+    }
+    /*
+    * 获取搜索框中的 value 值，并发起请求
+    * */
+    events = {
+      searchs(value) {
+        this.gopodsList(this.sort, this.list, value)
+        this.name = value
+        this.number = 1
+//        console.log(value)
+//        if (!this.name) {
+//          console.log(1)
+//          this.gopodsList(this.sort, this.list)
+//        }
+        this.$apply()
+      },
+      Sorts(sort, list) {
+        this.number = 1
+        this.sort = sort
+        this.list = list
+        this.$apply()
+        if (sort) {
+          this.sort = 'desc'
+        } else {
+          this.sort = 'asc'
+        }
+        this.gopodsList(this.sort, this.list, this.name)
+      }
+    }
+    computed = {
+    }
+
+    methods = {
+      /*
+  * 用户下拉触底事件
+  * */
+      onReachBottom() {
+        this.number += 1
+//        console.log(this.number, this.pageCount)
+        if (this.pageCount < this.number) {
+          return
+        } else {
+          wx.request({
+            url: this.api + '/restapi/goods',
+            data: {
+              config_id: '622',
+              per_page: 13,
+              sortby: this.list,     //根据什么属性排序
+              sort: this.sort,     //正序倒序
+              name: this.name,   //搜索框模糊查询
+              page: this.number
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            method: 'GET',
+            success: (res) => {
+//          this.shop_list = res.data.data.items
+//              console.log(res.data.data.items)
+              res.data.data.items.forEach((item) => {
+                this.shop_delicioous.push(item)
+              })
+              this.pageCount = res.data.data._meta.pageCount
+              this.$apply()
+            }
+          })
+        }
+      }
+    }
+    /*
+    * 商品列表
+    * */
+    gopodsList = function (sort = '', list = '', name = '') {
+      wx.request({
+        url: this.api + '/restapi/goods',
+        data: {
+          config_id: '622',
+          per_page: 13,
+          page: 1,
+          sortby: list,     //根据什么属性排序
+          sort: sort,     //正序倒序
+          name: name  //搜索框模糊查询
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'GET',
+        success: (res) => {
+//          this.shop_list = res.data.data.items
+//          console.log(res.data.data.items)
+          this.shop_delicioous = res.data.data.items
+          this.pageCount = res.data.data._meta.pageCount
+          this.$apply()
+        }
+      })
+    }
+    onLoad() {
+      this.api = this.$parent.globalData.api
+      /*
+     * 商品列表请求
+     * */
+      this.gopodsList()
+    }
+  }
+</script>

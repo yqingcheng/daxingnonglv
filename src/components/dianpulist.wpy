@@ -1,0 +1,120 @@
+
+<!---------------------------------店铺列表---------------------------------------------->
+
+<style lang="less">
+  .shop_delicioou{
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding: 10rpx;
+    box-sizing: border-box;
+    display: flex;
+    image{
+      height: 190rpx;
+      flex: 0 0 190rpx;
+    }
+    .shop_data{
+      height: 190rpx;
+      flex: 1;
+      padding: 0 45rpx 0 40rpx;
+      display: flex;
+      flex-direction: column;
+      .view1{
+        display: flex;
+        justify-content: space-between;
+        text:nth-child(1){
+          font-size: 32rpx;
+        }
+        text:nth-child(2){
+          color: #ccc;
+          font-size: 30rpx;
+        }
+      }
+      .view2{
+        color: red;
+        font-size: 25rpx;
+        padding: 15rpx 0;
+        overflow : hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="dianpulist">
+    <view class="shop_delicioou" wx:for="{{shop_delicioou}}" wx:key="{{item}}" data-id="{{item.id}}" @tap="dianpuSkip">
+      <image src="{{api+item.image}}" mode="scleToFill"></image>
+      <view class="shop_data">
+        <view class="view1">
+          <text>{{item.name}}</text>
+          <text wx:if="{{pages}}">{{item.distance}}m</text>
+        </view>
+        <view class="view2">
+          注：{{item.detail}}
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Dianpulist extends wepy.component {
+    props = {
+      shop_delicioou: {
+        type: Array,
+        coerce: function (v) {
+          return v
+        }
+      },
+      num: {
+        type: Number,
+        coerce: function (v) {
+          return v
+        }
+      },
+      page: {
+        type: String,
+        coerce: function (v) {
+          return v
+        }
+      }
+    }
+    data = {
+      api: '',
+      pages: false
+    }
+    methods = {
+      dianpuSkip(e) {
+        if (this.num === 0) {
+          wx.navigateTo({url: 'otherpage/dianpudetails?id=' + e.currentTarget.dataset.id})
+        } else {
+          wx.navigateTo({url: 'dianpudetails?id=' + e.currentTarget.dataset.id})
+        }
+      }
+//      shopSkip(e) {
+//        if (this.num === 0) {
+//          wx.navigateTo({url: 'otherpage/shopdetails'})
+//        } else {
+//          wx.navigateTo({url: 'shopdetails'})
+//        }
+//      },
+//      buySkip(e) {
+//        if (this.num === 0) {
+//          wx.navigateTo({url: 'otherpage/payorder'})
+//        } else {
+//          wx.navigateTo({url: 'payorder'})
+//        }
+//      }
+    }
+    onLoad() {
+      this.api = this.$parent.$parent.globalData.api
+      if (this.page === 'nearby') {
+        this.pages = true
+        this.$apply()
+      }
+    }
+  }
+</script>
